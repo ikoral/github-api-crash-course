@@ -9,6 +9,7 @@
   <body>
     <h1>GitHub tutorial</h1>
     <button id="btnRepos">Repos</button>
+    <button id="btnIssues">Issues</button>
 
     <div id="divResult"></div>
     <script>
@@ -16,6 +17,9 @@
       const divResult = document.getElementById("divResult");
 
       btnRepos.addEventListener("click", getRepos);
+
+      const btnIssues = document.getElementById("btnIssues");
+      btnIssues.addEventListener("click", getIssues);
 
       async function getRepos() {
         clear();
@@ -26,7 +30,7 @@
         //console.log(result);
         //result.items.forEach(i => console.log(i.full_name));
         result.items.forEach(i => {
-          console.log(i);
+          //console.log(i);
           const anchor = document.createElement("a");
           anchor.href = i.html_url;
           anchor.textContent = i.full_name;
@@ -38,6 +42,22 @@
       function clear() {
         while (divResult.firstChild)
           divResult.removeChild(divResult.firstChild);
+      }
+
+      async function getIssues() {
+        clear();
+        const url =
+          "https://api.github.com/search/issues?q=author:raisedadead repo:freecodecamp/freecodecamp type:issue";
+        const response = await fetch(url);
+        const result = await response.json();
+        console.log(result);
+        result.items.forEach(i => {
+          const anchor = document.createElement("a");
+          anchor.href = i.html_url;
+          anchor.textContent = i.title;
+          divResult.appendChild(anchor);
+          divResult.appendChild(document.createElement("br"));
+        });
       }
     </script>
   </body>
